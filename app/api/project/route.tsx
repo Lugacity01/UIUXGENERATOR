@@ -38,3 +38,19 @@ export async function GET(req: NextRequest){
     }
 
 }
+
+
+export async function PUT(req: NextRequest){
+
+    const {projectName, theme, projectId} = await req.json()
+
+    const result = await db.update(projectsTable).set({
+        projectName: projectName,
+        theme: theme,
+        
+    }).where(eq(projectsTable.projectId, projectId))
+    .returning()
+
+    return NextResponse.json(result[0])
+
+}

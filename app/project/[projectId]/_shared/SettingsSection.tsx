@@ -3,26 +3,35 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { SettingContext } from "@/context/SettingContext";
 import { THEME_NAME_LIST, THEMES } from "@/data/Themes";
 import { ProjectType } from "@/type/type";
 import { Camera, Share, Sparkle } from "lucide-react";
 import { Project } from "next/dist/build/swc/types";
-import React, { useEffect, useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
 
 type Props = {
-  projectDetail: ProjectType | undefined ;
+  projectDetail: ProjectType | undefined;
 };
 
-function SettingsSection({projectDetail}: Props) {
+function SettingsSection({ projectDetail }: Props) {
   const [selectedTheme, setSelectedTheme] = useState("AURORA_INK");
   const [projectName, setProjectName] = useState(projectDetail?.projectName);
   const [userNewScreenPrompt, setUserNewScreenPrompt] = useState<string>("");
-
+  const { settingDetail, setSettingDetail } = useContext(SettingContext);
 
   useEffect(() => {
-    projectDetail&&setProjectName(projectDetail?.projectName);
+    projectDetail && setProjectName(projectDetail?.projectName);
+    setSelectedTheme(projectDetail?.theme as string);
   }, [projectDetail]);
+
+  const onThemeSelect = (theme: string) => {
+    setSelectedTheme(theme);
+    setSettingDetail((prev: any) => ({
+      ...prev,
+      theme: theme,
+    }));
+  };
 
   return (
     <div className="w-[300px] p-5 border-r h-[90vh]">
@@ -30,12 +39,25 @@ function SettingsSection({projectDetail}: Props) {
 
       <div className="mt-3">
         <h2 className="text-sm mb-1">Project Name</h2>
-        <Input  onChange={(event)=> setProjectName(event.target.value)} value={projectName} placeholder="Project Name" />
+        <Input
+          onChange={(event) => {
+            setProjectName(event.target.value);
+            setSettingDetail((prev: any) => ({
+              ...prev,
+              projectName: projectName,
+            }));
+          }}
+          value={projectName}
+          placeholder="Project Name"
+        />
       </div>
 
       <div className="mt-3">
         <h2 className="text-sm mb-1">Generate New Screen</h2>
-        <Textarea  onChange={(event)=> setUserNewScreenPrompt(event.target.value)} placeholder="Enter Prompt to generate screen using AI" />
+        <Textarea
+          onChange={(event) => setUserNewScreenPrompt(event.target.value)}
+          placeholder="Enter Prompt to generate screen using AI"
+        />
         <Button size={"sm"} className="mt-2 w-full">
           <Sparkle /> Generate with AI{" "}
         </Button>
@@ -48,7 +70,7 @@ function SettingsSection({projectDetail}: Props) {
             {THEME_NAME_LIST.map((theme, index) => (
               <div
                 key={index}
-                onClick={() => setSelectedTheme(theme)}
+                onClick={() => onThemeSelect(theme)}
                 className={`p-3 border mb-2 rounded-lg cursor-pointer hover:border-primary ${
                   theme === selectedTheme && "border-primary bg-primary/20"
                 }`}
@@ -69,10 +91,12 @@ function SettingsSection({projectDetail}: Props) {
                   />
                   <div
                     className={`h-4 w-4 rounded-full`}
-                    style={{ background: `linear-gradient(
+                    style={{
+                      background: `linear-gradient(
                         135deg, ${THEMES[theme].background},
                         ${THEMES[theme].primary},
-                        ${THEMES[theme].accent})` }}
+                        ${THEMES[theme].accent})`,
+                    }}
                   />
                 </div>
               </div>

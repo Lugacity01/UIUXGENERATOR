@@ -235,6 +235,234 @@ export const THEMES = {
       "#b18cff",
     ],
   },
+
+  NETFLIX_DARK: {
+  background: "#141414",
+  foreground: "#ffffff",
+
+  card: "#1f1f1f",
+  cardForeground: "#ffffff",
+
+  popover: "#1f1f1f",
+  popoverForeground: "#ffffff",
+
+  primary: "#E50914",
+  primaryRgb: "229, 9, 20",
+  primaryForeground: "#ffffff",
+
+  secondary: "#2a2a2a",
+  secondaryForeground: "#ffffff",
+
+  muted: "#1a1a1a",
+  mutedForeground: "#b3b3b3",
+
+  accent: "#b20710",
+  accentForeground: "#ffffff",
+
+  destructive: "#ff4d4f",
+
+  border: "#2f2f2f",
+  input: "#2f2f2f",
+  ring: "#E50914",
+  radius: "0.9rem",
+
+  chart: ["#E50914", "#ff6b6b", "#b20710", "#8c0000", "#ffffff"],
+},
+
+NETFLIX_LIGHT: {
+  background: "#ffffff",
+  foreground: "#141414",
+
+  card: "#ffffff",
+  cardForeground: "#141414",
+
+  popover: "#ffffff",
+  popoverForeground: "#141414",
+
+  primary: "#E50914",
+  primaryRgb: "229, 9, 20",
+  primaryForeground: "#ffffff",
+
+  secondary: "#f5f5f5",
+  secondaryForeground: "#141414",
+
+  muted: "#eeeeee",
+  mutedForeground: "#666666",
+
+  accent: "#b20710",
+  accentForeground: "#ffffff",
+
+  destructive: "#ff4d4f",
+
+  border: "#dddddd",
+  input: "#ffffff",
+  ring: "#E50914",
+  radius: "0.9rem",
+
+  chart: ["#E50914", "#ff6b6b", "#b20710", "#8c0000", "#333333"],
+},
+
+SHOPIFY_LIGHT: {
+  background: "#f6f6f7",
+  foreground: "#202223",
+
+  card: "#ffffff",
+  cardForeground: "#202223",
+
+  popover: "#ffffff",
+  popoverForeground: "#202223",
+
+  primary: "#95BF47",
+  primaryRgb: "149, 191, 71",
+  primaryForeground: "#ffffff",
+
+  secondary: "#e8f1dc",
+  secondaryForeground: "#202223",
+
+  muted: "#eef2eb",
+  mutedForeground: "#6d7175",
+
+  accent: "#004C3F",
+  accentForeground: "#ffffff",
+
+  destructive: "#d72c0d",
+
+  border: "#dfe3e8",
+  input: "#ffffff",
+  ring: "#95BF47",
+  radius: "0.8rem",
+
+  chart: ["#95BF47", "#004C3F", "#5e8e3e", "#b8e986", "#202223"],
+},
+SHOPIFY_DARK: {
+  background: "#0b1c18",
+  foreground: "#ffffff",
+
+  card: "#102621",
+  cardForeground: "#ffffff",
+
+  popover: "#102621",
+  popoverForeground: "#ffffff",
+
+  primary: "#95BF47",
+  primaryRgb: "149, 191, 71",
+  primaryForeground: "#0b1c18",
+
+  secondary: "#163a32",
+  secondaryForeground: "#ffffff",
+
+  muted: "#122f28",
+  mutedForeground: "#a3b5af",
+
+  accent: "#00c9a7",
+  accentForeground: "#0b1c18",
+
+  destructive: "#ff6b6b",
+
+  border: "#1d4a41",
+  input: "#1d4a41",
+  ring: "#95BF47",
+  radius: "0.8rem",
+
+  chart: ["#95BF47", "#00c9a7", "#5e8e3e", "#b8e986", "#ffffff"],
+},
+FIGMA_LIGHT: {
+  background: "#ffffff",
+  foreground: "#1e1e1e",
+
+  card: "#ffffff",
+  cardForeground: "#1e1e1e",
+
+  popover: "#ffffff",
+  popoverForeground: "#1e1e1e",
+
+  primary: "#F24E1E",
+  primaryRgb: "242, 78, 30",
+  primaryForeground: "#ffffff",
+
+  secondary: "#f2f2f2",
+  secondaryForeground: "#1e1e1e",
+
+  muted: "#f5f5f5",
+  mutedForeground: "#6b6b6b",
+
+  accent: "#A259FF",
+  accentForeground: "#ffffff",
+
+  destructive: "#ff7262",
+
+  border: "#e6e6e6",
+  input: "#ffffff",
+  ring: "#F24E1E",
+  radius: "0.75rem",
+
+  chart: ["#F24E1E", "#A259FF", "#1ABCFE", "#0ACF83", "#FF7262"],
+},
+FIGMA_DARK: {
+  background: "#1e1e1e",
+  foreground: "#ffffff",
+
+  card: "#2a2a2a",
+  cardForeground: "#ffffff",
+
+  popover: "#2a2a2a",
+  popoverForeground: "#ffffff",
+
+  primary: "#F24E1E",
+  primaryRgb: "242, 78, 30",
+  primaryForeground: "#ffffff",
+
+  secondary: "#333333",
+  secondaryForeground: "#ffffff",
+
+  muted: "#252525",
+  mutedForeground: "#9e9e9e",
+
+  accent: "#1ABCFE",
+  accentForeground: "#1e1e1e",
+
+  destructive: "#ff7262",
+
+  border: "#3a3a3a",
+  input: "#3a3a3a",
+  ring: "#F24E1E",
+  radius: "0.75rem",
+
+  chart: ["#F24E1E", "#A259FF", "#1ABCFE", "#0ACF83", "#FF7262"],
+},
+DISCORD_DARK: {
+  background: "#1e1f22",
+  foreground: "#ffffff",
+
+  card: "#2b2d31",
+  cardForeground: "#ffffff",
+
+  popover: "#2b2d31",
+  popoverForeground: "#ffffff",
+
+  primary: "#5865F2",
+  primaryRgb: "88, 101, 242",
+  primaryForeground: "#ffffff",
+
+  secondary: "#313338",
+  secondaryForeground: "#ffffff",
+
+  muted: "#232428",
+  mutedForeground: "#b5bac1",
+
+  accent: "#23a559",
+  accentForeground: "#ffffff",
+
+  destructive: "#f23f43",
+
+  border: "#3f4147",
+  input: "#3f4147",
+  ring: "#5865F2",
+  radius: "0.85rem",
+
+  chart: ["#5865F2", "#23a559", "#f0b132", "#f23f43", "#ffffff"],
+},
+
 } as const;
 
 export const THEME_NAME_LIST = [
@@ -244,6 +472,13 @@ export const THEME_NAME_LIST = [
   "MOSS_PARCHMENT",
   "POLAR_MINT",
   "OBSIDIAN_BLOOM",
+  "NETFLIX_DARK",
+  "NETFLIX_LIGHT",
+  "SHOPIFY_LIGHT",
+  "SHOPIFY_DARK",
+  "FIGMA_LIGHT",
+  "FIGMA_DARK",
+  "DISCORD_DARK",
 ] as const ;
 
 export type ThemeKey = keyof typeof THEMES;
