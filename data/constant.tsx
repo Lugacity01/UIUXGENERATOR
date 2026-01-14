@@ -1,3 +1,5 @@
+import { themeToCssVars } from "./Themes";
+
 export const suggestions = [
   {
     icon: '✈️',
@@ -35,3 +37,28 @@ export const suggestions = [
     description: 'Interactive learning app for kids with rewards. Colorful UI and playful illustrations.'
   }
 ]
+
+
+
+export  const HtmlWrapper = (theme:any, htmlCode: string) =>{ 
+  return`
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+
+  <style>
+    ${themeToCssVars(theme)}
+  </style>
+</head>
+
+<body style="background: var(--background); color: var(--foreground); width:100%;">
+  ${htmlCode ?? ""}
+</body>
+</html>
+`};
+ 

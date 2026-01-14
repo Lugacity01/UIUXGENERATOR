@@ -9,6 +9,7 @@ import { ProjectType, ScreenConfig } from "@/type/type";
 import { Loader2Icon } from "lucide-react";
 import Canvas from "./_shared/Canvas";
 import { SettingContext } from "@/context/SettingContext";
+import { RefreshDataContext } from "@/context/RefreshDataContext";
 
 function ProjectCanvasPlayground() {
   const { projectId } = useParams();
@@ -19,8 +20,10 @@ function ProjectCanvasPlayground() {
   const [screenConfig, setScreenConfig] = useState<ScreenConfig[]>([]);
   const {settingDetail, setSettingDetail} = useContext(SettingContext)
   const [loading, setLoading] = useState(false);
-
   const [loadingMsg, setLoadingMsg] = useState("Loading");
+  const {refreshData, setRefreshData} = useContext(RefreshDataContext)
+  const [takeScreenshot, setTakeScreenshot] = useState<any>();
+  
 
   const GetProjectDetails = async () => {
     setLoading(true);
@@ -36,6 +39,12 @@ function ProjectCanvasPlayground() {
 
     setLoading(false);
   };
+
+   useEffect(() => {
+    if (refreshData?.method == "ScreenConfig") {
+      GetProjectDetails();
+    }
+  }, [refreshData]);
 
   useEffect(() => {
     if (
@@ -96,6 +105,7 @@ function ProjectCanvasPlayground() {
       }
     } finally {
       setLoading(false);
+      setTakeScreenshot(true)
     }
   };
 
@@ -112,10 +122,10 @@ function ProjectCanvasPlayground() {
           </div>
         )}
 
-        <SettingsSection projectDetail={projectDetail} />
+        <SettingsSection takeScreenshot={()=>setTakeScreenshot(false)} projectDetail={projectDetail} screenDescription={screenConfig[0]?.screenDescription}/>
 
         {/* Canvas */}
-        <Canvas projectDetail={projectDetail} screenConfig={screenConfig} />
+        <Canvas takeScreenshot={takeScreenshot} projectDetail={projectDetail} screenConfig={screenConfig} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { SettingContext } from "@/context/SettingContext";
 import { themeToCssVars, THEMES } from "@/data/Themes";
-import { ProjectType } from "@/type/type";
+import { ProjectType, ScreenConfig } from "@/type/type";
 import { GripVertical } from "lucide-react";
 import {
   useCallback,
@@ -11,6 +11,8 @@ import {
   useState,
 } from "react";
 import { Rnd } from "react-rnd";
+import ScreenHandler from "./ScreenHandler";
+import { HtmlWrapper } from "@/data/constant";
 
 type Props = {
   x: number;
@@ -20,6 +22,8 @@ type Props = {
   height: number;
   htmlCode: string | undefined;
   projectDetail: ProjectType | undefined;
+  screen: ScreenConfig | undefined;
+   iframeRef: any
 };
 
 function ScreenFrame({
@@ -30,57 +34,30 @@ function ScreenFrame({
   height,
   htmlCode,
   projectDetail,
+  screen,
+   iframeRef
 }: Props) {
   const { settingDetail } = useContext(SettingContext);
 
-  /* -------------------------------------------
-   * 1️⃣ Resolve active theme (settings > project)
-   * ------------------------------------------- */
+  // Resolve active theme (settings > project)
   const activeThemeKey = useMemo(() => {
-    return (
-      settingDetail?.theme ??
-      projectDetail?.theme ??
-      "AURORA_INK"
-    );
+    return settingDetail?.theme ?? projectDetail?.theme ?? "AURORA_INK";
   }, [settingDetail?.theme, projectDetail?.theme]);
 
   const themeObj = THEMES[activeThemeKey as keyof typeof THEMES];
 
-  /* -------------------------------------------
-   * 2️⃣ iframe + size state
-   * ------------------------------------------- */
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  //  iframe + size state
+  // const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [size, setSize] = useState({ width, height });
 
   useEffect(() => {
     setSize({ width, height });
   }, [width, height]);
 
-  /* -------------------------------------------
-   * 3️⃣ Build iframe HTML (theme-dependent!)
-   * ------------------------------------------- */
+  // Build iframe HTML (theme-dependent!)
   const html = useMemo(() => {
-    return `
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
-
-  <style>
-    ${themeToCssVars(themeObj)}
-  </style>
-</head>
-
-<body style="background: var(--background); color: var(--foreground); width:100%;">
-  ${htmlCode ?? ""}
-</body>
-</html>
-`;
-  }, [htmlCode, themeObj]); // 🔥 IMPORTANT
+    return HtmlWrapper(themeObj, htmlCode ?? "");
+  }, [themeObj, htmlCode]);
 
   /* -------------------------------------------
    * 4️⃣ Auto-height measurement
@@ -114,9 +91,7 @@ function ScreenFrame({
     }
   }, []);
 
-  /* -------------------------------------------
-   * 5️⃣ Re-measure on iframe load + theme change
-   * ------------------------------------------- */
+  //  Re-measure on iframe load + theme change
   useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return;
@@ -156,9 +131,6 @@ function ScreenFrame({
     };
   }, [measureIframeHeight, html]); // 🔥 html dependency is key
 
-  /* -------------------------------------------
-   * 6️⃣ Render
-   * ------------------------------------------- */
   return (
     <Rnd
       default={{ x, y, width, height }}
@@ -177,14 +149,13 @@ function ScreenFrame({
       }}
     >
       <div className="drag-handle flex gap-2 items-center cursor-move bg-white rounded-lg p-4">
-        <GripVertical className="h-4 w-4 text-gray-500" />
-        Drag Here
+        <ScreenHandler theme={themeObj} screen={screen} iframeRef={iframeRef}  projectId={projectDetail?.projectId}/>
       </div>
 
       <div className="bg-white rounded-2xl mt-5 h-full p-5">
         <iframe
           ref={iframeRef}
-          key={activeThemeKey} 
+          key={activeThemeKey}
           className="w-full h-full bg-white"
           sandbox="allow-same-origin allow-scripts"
           srcDoc={html}

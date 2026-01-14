@@ -1,12 +1,17 @@
 import { db } from "@/config/db";
 import { openrouter } from "@/config/openroute";
 import { projectsTable, ScreenConfigTable } from "@/config/schema";
-import { APP_LAYOUT_CONFIG_PROMPT } from "@/data/Prompt";
-import { eq } from "drizzle-orm";
+import {
+  APP_LAYOUT_CONFIG_PROMPT,
+  GENERATE_NEW_SCREEN_IN_EXISTING_PROJECT_PROJECT,
+} from "@/data/Prompt";
+import { currentUser } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { userInput, deviceType, projectId } = await req.json();
+  const { userInput, deviceType, projectId, oldScreenDescription, theme } =
+    await req.json();
 
   const aiResult = await openrouter.chat.send({
     model: "openai/gpt-oss-120b:free",
@@ -14,10 +19,25 @@ export async function POST(req: NextRequest) {
       {
         role: "user",
         content: `
-                ${APP_LAYOUT_CONFIG_PROMPT.replace("{deviceType}", deviceType)}
-
+                ${
+                  oldScreenDescription
+                    ? GENERATE_NEW_SCREEN_IN_EXISTING_PROJECT_PROJECT.replace(
+                        "{deviceType}",
+                        deviceType
+                      )
+                    : APP_LAYOUT_CONFIG_PROMPT.replace(
+                        "{deviceType}",
+                        deviceType
+                      ).replace("{theme}", theme)
+                }
                 USER REQUEST:
-                ${userInput}
+                ${
+                  oldScreenDescription
+                    ? userInput +
+                      "Old Screen Description is: " +
+                      oldScreenDescription
+                    : userInput
+                }
 
                 IMPORTANT:
                 Return ONLY valid JSON. No explanations.
@@ -35,11 +55,14 @@ export async function POST(req: NextRequest) {
 
   if (JSONAiResult) {
     //   Update projectsTable with project name
-    await db.update(projectsTable).set({
-      projectVisualDescription: JSONAiResult?.projectVisualDescription,
-      projectName: JSONAiResult?.projectName,
-      theme: JSONAiResult?.theme,
-    }).where(eq(projectsTable.projectId, projectId as string));
+ !oldScreenDescription &&   await db
+      .update(projectsTable)
+      .set({
+        projectVisualDescription: JSONAiResult?.projectVisualDescription,
+        projectName: JSONAiResult?.projectName,
+        theme: JSONAiResult?.theme,
+      })
+      .where(eq(projectsTable.projectId, projectId as string));
 
     //   Save to DB ScreenConfigTable
     JSONAiResult.screens?.forEach(async (screen: any) => {
@@ -55,5 +78,26 @@ export async function POST(req: NextRequest) {
   } else {
     NextResponse.json({ msg: "Internal Server Error" }, { status: 500 });
   }
+}
 
+export async function DELETE(req: NextRequest) {
+  const projectId = req.nextUrl.searchParams.get("projectId");
+  const screenId = req.nextUrl.searchParams.get("screenId");
+
+  const user = await currentUser();
+
+  if (!user) {
+    return NextResponse.json({ msg: "Unauthorized User", status: 400 });
+  }
+
+  const result = await db
+    .delete(ScreenConfigTable)
+    .where(
+      and(
+        eq(ScreenConfigTable.screenId, screenId as string),
+        eq(ScreenConfigTable.projectId, projectId as string)
+      )
+    );
+
+  return NextResponse.json({ mesg: "Deleted Successfully" });
 }

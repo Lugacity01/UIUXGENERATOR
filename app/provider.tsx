@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { UserDetailContext } from "@/context/UserDetailContext";
 import { SettingContext } from "@/context/SettingContext";
+import { RefreshDataContext } from "@/context/RefreshDataContext";
 
 function Provider({ children }: any) {
   const [userDetail, setUserDetail] = useState();
   const [settingDetail, setSettingDetail] = useState();
+  const [refreshData, setRefreshData ]= useState();
   
 
   useEffect(() => {
@@ -25,7 +27,9 @@ function Provider({ children }: any) {
   return (
     <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
       <SettingContext.Provider value={{settingDetail, setSettingDetail}}>
-      <div>{children}</div>
+        <RefreshDataContext.Provider value={{refreshData, setRefreshData}}>
+            <div>{children}</div>
+        </RefreshDataContext.Provider>
       </SettingContext.Provider>
     </UserDetailContext.Provider>
   );
