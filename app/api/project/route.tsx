@@ -1,7 +1,7 @@
 import { db } from "@/config/db";
 import { projectsTable, ScreenConfigTable } from "@/config/schema";
 import { currentUser } from "@clerk/nextjs/server";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -26,6 +26,16 @@ export async function GET(req: NextRequest) {
   const user = await currentUser();
 
   try {
+    if (!projectId) {
+      const result = await db
+        .select().from(projectsTable)
+        .where(eq(projectsTable.userId,user?.primaryEmailAddress?.emailAddress as string
+          )).orderBy(desc(projectsTable.id));
+          
+          return NextResponse.json(result )
+   
+        }
+
     const result = await db
       .select()
       .from(projectsTable)

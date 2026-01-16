@@ -4,9 +4,10 @@ export type ProjectType = {
     device: string,
     userInput: string,
     createdOn: string,
+    createdAt: string,
     projectName?: string,
     theme?: string,
-
+    screenShot?: any,
 }
 
 
